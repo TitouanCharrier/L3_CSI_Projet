@@ -1,0 +1,134 @@
+@startuml
+
+class Hopital {
+    +id: int
+    +nom: String
+    +adresse: String
+}
+
+class Personne {
+    +id: int
+    +nom: String
+    +prenom: String
+    +naissance: DateTime
+}
+
+class Personnel {
+    +embauche: DateTime
+    +finContrat: DateTime
+    +salaire: int
+}
+
+class Medecin {
+  +specialite: String
+}
+
+class Infirmier {
+  +service: String
+}
+
+class AgentEntretient {
+}
+
+class Administratif {
+  +service: String
+}
+
+class Patient {
+  +antecedentsMedicaux: String
+  +raisonAccueil: String
+  +dateEntree: Date
+  +dateSortiePrevisionnelle: Date
+  +dateSortieReelle: Date
+}
+
+class VisiteMedicale {
+  +id: int
+  +date: Date
+  +examens: String
+  +commentaires: String
+  +medecin: Medecin
+  +patient: Patient
+}
+
+class CompteRendu {
+  +id: int
+  +date: Date
+  +examens: String
+  +commentaires: String
+  +visite: VisiteMedicale
+}
+
+class Soin {
+  +id: int
+  +dateHeure: DateTime
+  +description: String
+  +medicaments: String
+  +quantite: int
+  +infirmier: Infirmier
+  +patient: Patient
+}
+
+class Reunion {
+  +id: int
+  +dateHeure: DateTime
+  +participants: List<Personnel>
+  +soinsDecides: List<Soin>
+}
+
+class Service {
+  +id: int
+  +nom: String
+  +responsableAdministratif: Administratif
+  +medecinReferent: Medecin
+}
+
+class Chambre {
+  +numero: int
+  +etage: int
+  +capacite: int
+  +service: Service
+  +lits: List<Lit>
+}
+
+class Lit {
+  +id: int
+  +numero: int
+  +occupant: Patient
+  +dateDernierAgentEntretient: Date
+  +nettoyeur: AgentEntretient
+}
+
+'/* ------------------------------ Relations ----------------------------------------------------*/
+
+Hopital <|-- Service : "relatif à"
+
+Personne <|-- Personnel : "role"
+Personne <|-- Patient : "role"
+
+Personnel <|-- Medecin
+Personnel <|-- Infirmier
+Personnel <|-- AgentEntretient
+Personnel <|-- Administratif
+
+
+Hopital "1" -- "0..*" Personnel : "emploi" 
+
+Medecin "1" -- "0..*" VisiteMedicale : "réalise"
+VisiteMedicale "1" -- "1" CompteRendu : "produit"
+VisiteMedicale "1" -- "1" Patient : "pour"
+
+Infirmier "1" -- "0..*" Soin : "délivre"
+Soin "1" -- "1" Patient : "à"
+
+Reunion "1" -- "0..*" Soin : "décide"
+Reunion "1" -- "0..*" Personnel : "participants"
+
+Service "1" -- "0..*" Chambre : "contient"
+Chambre "1" -- "2..6" Lit : "contient"
+Lit "1" -- "0..1" Patient : "occupé par"
+
+Service "1" -- "1" Administratif : "responsable"
+Service "1" -- "1" Medecin : "référent"
+
+@enduml
