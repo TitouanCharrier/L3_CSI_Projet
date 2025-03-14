@@ -1,1 +1,2 @@
-L3_CSI_PROJETL3_CSI_PROJETL3_CSI_PROJET
+Un projet de gestion hospitalière dans le cadre du cours de
+Conception des Systèmes d'Information de la L3.
