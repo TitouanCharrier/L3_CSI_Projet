@@ -4,22 +4,22 @@ USE Hopital;
 
 -- Table Hopital
 CREATE TABLE Hopital (
-    id INT PRIMARY KEY,
-    nom VARCHAR(100),
+    id_hop INT PRIMARY KEY,
+    nom_hop VARCHAR(100),
     adresse VARCHAR(255)
 );
 
 -- Table Personne
 CREATE TABLE Personne (
-    id INT PRIMARY KEY,
-    nom VARCHAR(100),
+    id_per INT PRIMARY KEY,
+    nom_per VARCHAR(100),
     prenom VARCHAR(100),
     naissance DATETIME
 );
 
 -- Table Personnel (Hérite de Personne)
 CREATE TABLE Personnel (
-    id INT PRIMARY KEY,
+    id_pers INT PRIMARY KEY,
     embauche DATETIME,
     finContrat DATETIME,
     salaire INT,
@@ -30,31 +30,31 @@ CREATE TABLE Personnel (
 
 -- Tables spécialisées (Medecin, Infirmier, AgentEntretient, Administratif)
 CREATE TABLE Medecin (
-    id INT PRIMARY KEY,
+    id_med INT PRIMARY KEY,
     specialite VARCHAR(100),
     FOREIGN KEY (id) REFERENCES Personnel(id)
 );
 
 CREATE TABLE Infirmier (
-    id INT PRIMARY KEY,
+    id_inf INT PRIMARY KEY,
     service VARCHAR(100),
     FOREIGN KEY (id) REFERENCES Personnel(id)
 );
 
 CREATE TABLE AgentEntretient (
-    id INT PRIMARY KEY,
+    id_agent INT PRIMARY KEY,
     FOREIGN KEY (id) REFERENCES Personnel(id)
 );
 
 CREATE TABLE Administratif (
-    id INT PRIMARY KEY,
+    id_admin INT PRIMARY KEY,
     service VARCHAR(100),
     FOREIGN KEY (id) REFERENCES Personnel(id)
 );
 
 -- Table Patient (Hérite de Personne)
 CREATE TABLE Patient (
-    id INT PRIMARY KEY,
+    id_pat INT PRIMARY KEY,
     antecedentsMedicaux TEXT,
     raisonAccueil TEXT,
     dateEntree DATE,
@@ -65,7 +65,7 @@ CREATE TABLE Patient (
 
 -- Table VisiteMedicale
 CREATE TABLE VisiteMedicale (
-    id INT PRIMARY KEY,
+    id_vis INT PRIMARY KEY,
     date DATE,
     examens TEXT,
     commentaires TEXT,
@@ -77,7 +77,7 @@ CREATE TABLE VisiteMedicale (
 
 -- Table CompteRendu
 CREATE TABLE CompteRendu (
-    id INT PRIMARY KEY,
+    id_com INT PRIMARY KEY,
     date DATE,
     examens TEXT,
     commentaires TEXT,
@@ -87,7 +87,7 @@ CREATE TABLE CompteRendu (
 
 -- Table Soin
 CREATE TABLE Soin (
-    id INT PRIMARY KEY,
+    id_soi INT PRIMARY KEY,
     dateHeure DATETIME,
     description TEXT,
     medicaments TEXT,
@@ -100,7 +100,7 @@ CREATE TABLE Soin (
 
 -- Table Reunion
 CREATE TABLE Reunion (
-    id INT PRIMARY KEY,
+    id_reu INT PRIMARY KEY,
     dateHeure DATETIME
 );
 
@@ -115,7 +115,7 @@ CREATE TABLE Participant_Reunion (
 
 -- Table Service
 CREATE TABLE Service (
-    id INT PRIMARY KEY,
+    id_serv INT PRIMARY KEY,
     nom VARCHAR(100),
     responsableAdministratif_id INT,
     medecinReferent_id INT,
@@ -125,7 +125,7 @@ CREATE TABLE Service (
 
 -- Table Chambre
 CREATE TABLE Chambre (
-    numero INT,
+    numero INT PRIMARY KEY,
     etage INT,
     capacite INT,
     service_id INT,
@@ -135,7 +135,7 @@ CREATE TABLE Chambre (
 
 -- Table Lit
 CREATE TABLE Lit (
-    id INT PRIMARY KEY,
+    id_lit INT PRIMARY KEY,
     numero INT,
     chambre_numero INT,
     service_id INT,
