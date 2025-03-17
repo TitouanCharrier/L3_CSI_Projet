@@ -146,3 +146,59 @@ CREATE TABLE Lit (
     FOREIGN KEY (nettoyeur_id) REFERENCES AgentEntretient(id),
     FOREIGN KEY (chambre_numero, service_id) REFERENCES Chambre(numero, service_id)
 );
+
+-- Insertion dans la table Hopital
+INSERT INTO Hopital (id, nom, adresse) VALUES
+(a, b, c);
+
+-- Insertion dans la table Personne
+INSERT INTO Personne (id, nom, prenom, naissance) VALUES
+(a, b, c, d);
+
+-- Insertion dans la table Personnel
+INSERT INTO Personnel (id, embauche, finContrat, salaire, hopital_id) VALUES
+(a, b, c, d, e);
+
+-- Insertion dans la table Medecin
+INSERT INTO Medecin (id, specialite) VALUES
+(a, b);
+
+-- Insertion dans la table Infirmier
+INSERT INTO Infirmier (id, service) VALUES
+(a, b);
+
+-- Insertion dans la table Patient
+INSERT INTO Patient (id, antecedentsMedicaux, raisonAccueil, dateEntree, dateSortiePrevisionnelle, dateSortieReelle) VALUES
+(a, b, c, d, e, f);
+
+-- Insertion dans la table VisiteMedicale
+INSERT INTO VisiteMedicale (id, date, examens, commentaires, medecin_id, patient_id) VALUES
+(a, b, c, d, e, f);
+
+-- Insertion dans la table CompteRendu
+INSERT INTO CompteRendu (id, date, examens, commentaires, visite_id) VALUES
+(a, b, c, d, e);
+
+-- Insertion dans la table Soin
+INSERT INTO Soin (id, dateHeure, description, medicaments, quantite, infirmier_id, patient_id) VALUES
+(a, b, c, d, e, f, g);
+
+-- Insertion dans la table Reunion
+INSERT INTO Reunion (id, dateHeure) VALUES
+(a, b);
+
+-- Insertion dans la table Participant_Reunion
+INSERT INTO Participant_Reunion (personnel_id, reunion_id) VALUES
+(a, b);
+
+-- Insertion dans la table Service
+INSERT INTO Service (id, nom, responsableAdministratif_id, medecinReferent_id) VALUES
+(a, b, c, d);
+
+-- Insertion dans la table Chambre
+INSERT INTO Chambre (numero, etage, capacite, service_id) VALUES
+(a, b, c, d);
+
+-- Insertion dans la table Lit
+INSERT INTO Lit (id, numero, chambre_numero, service_id, occupant_id, dateDernierAgentEntretient, nettoyeur_id) VALUES
+(a, b, c, d, e, f, g);
