@@ -1,4 +1,4 @@
 pkill feh
-plantuml EA.puml
-feh EA.png &
+plantuml class.puml
+feh class.png &
 

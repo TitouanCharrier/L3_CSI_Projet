@@ -1,14 +1,14 @@
 @startuml
 
 class Hopital {
-    +id: int
-    +nom: String
+    +id_hop: int
+    +nom_hop: String
     +adresse: String
 }
 
 class Personne {
-    +id: int
-    +nom: String
+    +id_per: int
+    +nom_per: String
     +prenom: String
     +naissance: DateTime
 }
@@ -43,7 +43,7 @@ class Patient {
 }
 
 class VisiteMedicale {
-  +id: int
+  +id_vis: int
   +date: Date
   +examens: String
   +commentaires: String
@@ -52,7 +52,7 @@ class VisiteMedicale {
 }
 
 class CompteRendu {
-  +id: int
+  +id_com: int
   +date: Date
   +examens: String
   +commentaires: String
@@ -60,7 +60,7 @@ class CompteRendu {
 }
 
 class Soin {
-  +id: int
+  +id_soi: int
   +dateHeure: DateTime
   +description: String
   +medicaments: String
@@ -70,15 +70,15 @@ class Soin {
 }
 
 class Reunion {
-  +id: int
+  +id_reu: int
   +dateHeure: DateTime
   +participants: List<Personnel>
   +soinsDecides: List<Soin>
 }
 
 class Service {
-  +id: int
-  +nom: String
+  +id_ser: int
+  +nom_ser: String
   +responsableAdministratif: Administratif
   +medecinReferent: Medecin
 }
@@ -92,7 +92,7 @@ class Chambre {
 }
 
 class Lit {
-  +id: int
+  +id_lit: int
   +numero: int
   +occupant: Patient
   +dateDernierAgentEntretient: Date
