@@ -79,10 +79,22 @@ CREATE TABLE VisiteMedicale (
 CREATE TABLE CompteRendu (
     id_com INT PRIMARY KEY,
     date DATE,
-    examens TEXT,
     commentaires TEXT,
-    visite_id INT,
-    FOREIGN KEY (visite_id) REFERENCES VisiteMedicale(id)
+    id_reu INT,
+    FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
+);
+
+-- Table Medicament
+CREATE TABLE Medicament (
+    id_medica INT PRIMARY KEY,
+    nom_medica TEXT
+);
+
+-- Table Ordonnance
+CREATE TABLE Ordonnance (
+    id_ord INT PRIMARY KEY,
+    id_medica INT,
+    FOREIGN KEY (id_medica) REFERENCES Medicament(id_medica)
 );
 
 -- Table Soin
@@ -90,12 +102,12 @@ CREATE TABLE Soin (
     id_soi INT PRIMARY KEY,
     dateHeure DATETIME,
     description TEXT,
-    medicaments TEXT,
-    quantite INT,
+    id_medica INT,
     infirmier_id INT,
     patient_id INT,
-    FOREIGN KEY (infirmier_id) REFERENCES Infirmier(id),
-    FOREIGN KEY (patient_id) REFERENCES Patient(id)
+    FOREIGN KEY (id_medica) REFERENCES Medicament(id_medica),
+    FOREIGN KEY (infirmier_id) REFERENCES Infirmier(infirmier_id),
+    FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
 );
 
 -- Table Reunion
