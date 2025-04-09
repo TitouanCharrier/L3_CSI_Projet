@@ -92,20 +92,20 @@ CREATE TABLE Medicament (
 
 -- Table Ordonnance
 CREATE TABLE Ordonnance (
-    id_ord INT PRIMARY KEY,
-    id_medica INT,
-    FOREIGN KEY (id_medica) REFERENCES Medicament(id_medica)
+    id_medica INT PRIMARY KEY,
+    id_soin INT PRYMARY KEY,
+    FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica)
+    FOREIGN KEY (id_soin) REFERENCES Soin (id_soin)
 );
 
 -- Table Soin
 CREATE TABLE Soin (
-    id_soi INT PRIMARY KEY,
+    id_soin INT PRIMARY KEY,
     dateHeure DATETIME,
     description TEXT,
     id_medica INT,
     infirmier_id INT,
     patient_id INT,
-    FOREIGN KEY (id_medica) REFERENCES Medicament(id_medica),
     FOREIGN KEY (infirmier_id) REFERENCES Infirmier(infirmier_id),
     FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
 );
