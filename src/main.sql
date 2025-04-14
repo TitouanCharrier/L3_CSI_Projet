@@ -1,7 +1,3 @@
--- Création de la base de données
-CREATE DATABASE Hopital;
-USE Hopital;
-
 -- Table Hopital
 CREATE TABLE Hopital (
     id_hop INT PRIMARY KEY,
@@ -23,33 +19,37 @@ CREATE TABLE Personnel (
     embauche DATETIME,
     finContrat DATETIME,
     salaire INT,
-    hopital_id INT,
-    FOREIGN KEY (id) REFERENCES Personne(id),
-    FOREIGN KEY (hopital_id) REFERENCES Hopital(id)
+    id_hop INT,
+    FOREIGN KEY (id_pers) REFERENCES Personne(id_per),
+    FOREIGN KEY (id_hop) REFERENCES Hopital(id_hop)
 );
 
 -- Tables spécialisées (Medecin, Infirmier, AgentEntretient, Administratif)
 CREATE TABLE Medecin (
     id_med INT PRIMARY KEY,
     specialite VARCHAR(100),
-    FOREIGN KEY (id) REFERENCES Personnel(id)
+    id_pers INT,
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE Infirmier (
     id_inf INT PRIMARY KEY,
     service VARCHAR(100),
-    FOREIGN KEY (id) REFERENCES Personnel(id)
+    id_pers INT,
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE AgentEntretient (
     id_agent INT PRIMARY KEY,
-    FOREIGN KEY (id) REFERENCES Personnel(id)
+    id_pers INT,
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE Administratif (
     id_admin INT PRIMARY KEY,
     service VARCHAR(100),
-    FOREIGN KEY (id) REFERENCES Personnel(id)
+    id_pers INT,
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
 );
 
 -- Table Patient (Hérite de Personne)
@@ -60,7 +60,8 @@ CREATE TABLE Patient (
     dateEntree DATE,
     dateSortiePrevisionnelle DATE,
     dateSortieReelle DATE,
-    FOREIGN KEY (id) REFERENCES Personne(id)
+    id_per INT,
+    FOREIGN KEY (id_per) REFERENCES Personne(id_per)
 );
 
 -- Table VisiteMedicale
@@ -69,10 +70,43 @@ CREATE TABLE VisiteMedicale (
     date DATE,
     examens TEXT,
     commentaires TEXT,
-    medecin_id INT,
-    patient_id INT,
-    FOREIGN KEY (medecin_id) REFERENCES Medecin(id),
-    FOREIGN KEY (patient_id) REFERENCES Patient(id)
+    id_med INT,
+    id_pat INT,
+    FOREIGN KEY (id_med) REFERENCES Medecin(id_med),
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat)
+);
+
+-- Table Medicament
+CREATE TABLE Medicament (
+    id_medica INT PRIMARY KEY,
+    nom_medica TEXT
+);
+
+-- Table Soin
+CREATE TABLE Soin (
+    id_soin INT PRIMARY KEY,
+    dateHeure DATETIME,
+    description TEXT,
+    id_inf INT,
+    id_pat INT,
+    FOREIGN KEY (id_inf) REFERENCES Infirmier(id_inf),
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat)
+);
+
+-- Table Ordonnance
+CREATE TABLE Ordonnance (
+    id_medica INT,
+    id_soin INT,
+    quantite INT,
+    PRIMARY KEY (id_medica, id_soin),
+    FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica),
+    FOREIGN KEY (id_soin) REFERENCES Soin (id_soin)
+);
+
+-- Table Reunion
+CREATE TABLE Reunion (
+    id_reu INT PRIMARY KEY,
+    dateHeure DATETIME
 );
 
 -- Table CompteRendu
@@ -84,136 +118,47 @@ CREATE TABLE CompteRendu (
     FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
 );
 
--- Table Medicament
-CREATE TABLE Medicament (
-    id_medica INT PRIMARY KEY,
-    nom_medica TEXT
-);
-
--- Table Ordonnance
-CREATE TABLE Ordonnance (
-    id_medica INT PRIMARY KEY,
-    id_soin INT PRYMARY KEY,
-    FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica)
-    FOREIGN KEY (id_soin) REFERENCES Soin (id_soin)
-);
-
--- Table Soin
-CREATE TABLE Soin (
-    id_soin INT PRIMARY KEY,
-    dateHeure DATETIME,
-    description TEXT,
-    id_medica INT,
-    infirmier_id INT,
-    patient_id INT,
-    FOREIGN KEY (infirmier_id) REFERENCES Infirmier(infirmier_id),
-    FOREIGN KEY (patient_id) REFERENCES Patient(patient_id)
-);
-
--- Table Reunion
-CREATE TABLE Reunion (
-    id_reu INT PRIMARY KEY,
-    dateHeure DATETIME
-);
-
 -- Table Participant_Reunion (Relation n-n entre Personnel et Reunion)
 CREATE TABLE Participant_Reunion (
-    personnel_id INT,
-    reunion_id INT,
-    PRIMARY KEY (personnel_id, reunion_id),
-    FOREIGN KEY (personnel_id) REFERENCES Personnel(id),
-    FOREIGN KEY (reunion_id) REFERENCES Reunion(id)
+    id_pers INT,
+    id_reu INT,
+    PRIMARY KEY (id_pers, id_reu),
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers),
+    FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
 );
 
 -- Table Service
 CREATE TABLE Service (
     id_serv INT PRIMARY KEY,
     nom VARCHAR(100),
-    responsableAdministratif_id INT,
-    medecinReferent_id INT,
-    FOREIGN KEY (responsableAdministratif_id) REFERENCES Administratif(id),
-    FOREIGN KEY (medecinReferent_id) REFERENCES Medecin(id)
+    id_admin INT,
+    id_med_ref INT,
+    FOREIGN KEY (id_admin) REFERENCES Administratif(id_admin),
+    FOREIGN KEY (id_med_ref) REFERENCES Medecin(id_med)
 );
 
 -- Table Chambre
 CREATE TABLE Chambre (
-    numero INT PRIMARY KEY,
+    numero_cha INT PRIMARY KEY,
     etage INT,
     capacite INT,
-    service_id INT,
-    PRIMARY KEY (numero, service_id),
-    FOREIGN KEY (service_id) REFERENCES Service(id)
+    id_serv INT,
+    FOREIGN KEY (id_serv) REFERENCES Service(id_serv)
 );
 
 -- Table Lit
 CREATE TABLE Lit (
     id_lit INT PRIMARY KEY,
-    numero INT,
-    chambre_numero INT,
-    service_id INT,
-    occupant_id INT,
-    dateDernierAgentEntretient DATE,
-    nettoyeur_id INT,
-    FOREIGN KEY (occupant_id) REFERENCES Patient(id),
-    FOREIGN KEY (nettoyeur_id) REFERENCES AgentEntretient(id),
-    FOREIGN KEY (chambre_numero, service_id) REFERENCES Chambre(numero, service_id)
+    numero_cha INT,
+    id_serv INT,
+    id_pat INT,
+    dateDernierEntretient DATE,
+    id_agent INT,
+    FOREIGN KEY (numero_cha) REFERENCES Chambre(numero_cha),
+    FOREIGN KEY (id_serv) REFERENCES Chambre(id_serv),
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
+    FOREIGN KEY (id_agent) REFERENCES AgentEntretient(id_agent)
 );
-
--- Insertion dans la table Hopital
-INSERT INTO Hopital (id, nom, adresse) VALUES
-(a, b, c);
-
--- Insertion dans la table Personne
-INSERT INTO Personne (id, nom, prenom, naissance) VALUES
-(a, b, c, d);
-
--- Insertion dans la table Personnel
-INSERT INTO Personnel (id, embauche, finContrat, salaire, hopital_id) VALUES
-(a, b, c, d, e);
-
--- Insertion dans la table Medecin
-INSERT INTO Medecin (id, specialite) VALUES
-(a, b);
-
--- Insertion dans la table Infirmier
-INSERT INTO Infirmier (id, service) VALUES
-(a, b);
-
--- Insertion dans la table Patient
-INSERT INTO Patient (id, antecedentsMedicaux, raisonAccueil, dateEntree, dateSortiePrevisionnelle, dateSortieReelle) VALUES
-(a, b, c, d, e, f);
-
--- Insertion dans la table VisiteMedicale
-INSERT INTO VisiteMedicale (id, date, examens, commentaires, medecin_id, patient_id) VALUES
-(a, b, c, d, e, f);
-
--- Insertion dans la table CompteRendu
-INSERT INTO CompteRendu (id, date, examens, commentaires, visite_id) VALUES
-(a, b, c, d, e);
-
--- Insertion dans la table Soin
-INSERT INTO Soin (id, dateHeure, description, medicaments, quantite, infirmier_id, patient_id) VALUES
-(a, b, c, d, e, f, g);
-
--- Insertion dans la table Reunion
-INSERT INTO Reunion (id, dateHeure) VALUES
-(a, b);
-
--- Insertion dans la table Participant_Reunion
-INSERT INTO Participant_Reunion (personnel_id, reunion_id) VALUES
-(a, b);
-
--- Insertion dans la table Service
-INSERT INTO Service (id, nom, responsableAdministratif_id, medecinReferent_id) VALUES
-(a, b, c, d);
-
--- Insertion dans la table Chambre
-INSERT INTO Chambre (numero, etage, capacite, service_id) VALUES
-(a, b, c, d);
-
--- Insertion dans la table Lit
-INSERT INTO Lit (id, numero, chambre_numero, service_id, occupant_id, dateDernierAgentEntretient, nettoyeur_id) VALUES
-(a, b, c, d, e, f, g);
 
 -- Insertion de données dans la table Hopital
 INSERT INTO Hopital (id_hop, nom_hop, adresse)
