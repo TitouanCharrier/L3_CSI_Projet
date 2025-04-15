@@ -150,12 +150,10 @@ CREATE TABLE Chambre (
 CREATE TABLE Lit (
     id_lit INT PRIMARY KEY,
     numero_cha INT,
-    id_serv INT,
     id_pat INT,
     dateDernierEntretient DATE,
     id_agent INT,
     FOREIGN KEY (numero_cha) REFERENCES Chambre(numero_cha),
-    FOREIGN KEY (id_serv) REFERENCES Chambre(id_serv),
     FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
     FOREIGN KEY (id_agent) REFERENCES AgentEntretient(id_agent)
 );
