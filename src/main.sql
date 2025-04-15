@@ -242,7 +242,7 @@ VALUES
 (2, 'Ibuprofene');
 
 -- Insertion de données dans la table Soin
-INSERT INTO Soin (id_soi, dateHeure, description, id_inf, id_pat)
+INSERT INTO Soin (id_soin, dateHeure, description, id_inf, id_pat)
 VALUES
 (1, '2023-10-01 08:00:00', 'Administration de médicaments', 4, 11),
 (2, '2023-10-02 09:00:00', 'Changement de pansement', 5, 12);
@@ -266,7 +266,7 @@ VALUES
 (2, '2023-10-02', 'RAS', 2);
 
 -- Insertion de données dans la table Participant_Reunion
-INSERT INTO Participant_Reunion (personnel_id, reunion_id)
+INSERT INTO Participant_Reunion (id_pers, id_reu)
 VALUES
 (1, 1),
 (2, 1),
@@ -288,9 +288,9 @@ VALUES
 -- Insertion de données dans la table Chambre
 INSERT INTO Chambre (numero_cha, etage, capacite)
 VALUES
-(101, 1, 2),
-(102, 1, 2),
-(201, 2, 4);
+(1, 1, 2),
+(2, 1, 2),
+(3, 2, 4);
 
 -- Insertion de données dans la table Lit
 INSERT INTO Lit (id_lit, numero_cha, id_pat, dateDernierEntretient, id_agent)
