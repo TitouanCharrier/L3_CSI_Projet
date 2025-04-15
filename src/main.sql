@@ -28,28 +28,24 @@ CREATE TABLE Personnel (
 CREATE TABLE Medecin (
     id_med INT PRIMARY KEY,
     specialite VARCHAR(100),
-    id_pers INT,
-    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
+    FOREIGN KEY (id_med) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE Infirmier (
     id_inf INT PRIMARY KEY,
     service VARCHAR(100),
-    id_pers INT,
-    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
+    FOREIGN KEY (id_inf) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE AgentEntretient (
     id_agent INT PRIMARY KEY,
-    id_pers INT,
-    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
+    FOREIGN KEY (id_agent) REFERENCES Personnel(id_pers)
 );
 
 CREATE TABLE Administratif (
     id_admin INT PRIMARY KEY,
     service VARCHAR(100),
-    id_pers INT,
-    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers)
+    FOREIGN KEY (id_admin) REFERENCES Personnel(id_pers)
 );
 
 -- Table Patient (Hérite de Personne)
@@ -60,8 +56,7 @@ CREATE TABLE Patient (
     dateEntree DATE,
     dateSortiePrevisionnelle DATE,
     dateSortieReelle DATE,
-    id_per INT,
-    FOREIGN KEY (id_per) REFERENCES Personne(id_per)
+    FOREIGN KEY (id_pat) REFERENCES Personne(id_per)
 );
 
 -- Table VisiteMedicale
@@ -137,6 +132,13 @@ CREATE TABLE Service (
     FOREIGN KEY (id_med_ref) REFERENCES Medecin(id_med)
 );
 
+-- Table Etage
+CREATE TABLE Etage (
+    id_eta INT PRIMARY KEY,
+    id_serv INT,
+    FOREIGN KEY (id_serv) REFERENCES Service(id_serv)
+);
+
 -- Table Chambre
 CREATE TABLE Chambre (
     numero_cha INT PRIMARY KEY,
@@ -182,7 +184,7 @@ VALUES
 (13, 'Simon', 'Luc', '1978-11-30');
 
 -- Insertion de données dans la table Personnel
-INSERT INTO Personnel (id_pers, embauche, finContrat, salaire, hopital_id)
+INSERT INTO Personnel (id_pers, embauche, finContrat, salaire, id_hop)
 VALUES
 (1, '2000-01-15', NULL, 5000, 1),
 (2, '2005-03-20', NULL, 4500, 1),
@@ -228,28 +230,40 @@ VALUES
 (13, 'Hypertension', 'Contrôle', '2023-10-01', '2023-10-10', NULL);
 
 -- Insertion de données dans la table VisiteMedicale
-INSERT INTO VisiteMedicale (id_vis, date, examens, commentaires, medecin_id, patient_id)
+INSERT INTO VisiteMedicale (id_vis, date, examens, commentaires, id_med, id_pat)
 VALUES
 (1, '2023-10-01', 'Électrocardiogramme', 'Résultats normaux', 1, 11),
 (2, '2023-10-02', 'Radiographie', 'Fracture détectée', 2, 12);
 
--- Insertion de données dans la table CompteRendu
-INSERT INTO CompteRendu (id_com, date, examens, commentaires, visite_id)
+--Insertion de données dans la table Medicament
+INSERT INTO Medicament (id_medica, nom_medica)
 VALUES
-(1, '2023-10-01', 'Électrocardiogramme', 'Résultats normaux', 1),
-(2, '2023-10-02', 'Radiographie', 'Fracture détectée', 2);
+(1, 'Paracetamol'),
+(2, 'Ibuprofene');
 
 -- Insertion de données dans la table Soin
-INSERT INTO Soin (id_soi, dateHeure, description, medicaments, quantite, infirmier_id, patient_id)
+INSERT INTO Soin (id_soi, dateHeure, description, id_inf, id_pat)
 VALUES
-(1, '2023-10-01 08:00:00', 'Administration de médicaments', 'Paracétamol', 2, 4, 11),
-(2, '2023-10-02 09:00:00', 'Changement de pansement', 'Ibuprofène', 0, 5, 12);
+(1, '2023-10-01 08:00:00', 'Administration de médicaments', 4, 11),
+(2, '2023-10-02 09:00:00', 'Changement de pansement', 5, 12);
+
+-- Insertion de données dans la table Ordonnance
+INSERT INTO Ordonnance (id_medica, id_soin, quantite)
+VALUES
+(1, 1, 2),
+(2, 1, 1);
 
 -- Insertion de données dans la table Reunion
 INSERT INTO Reunion (id_reu, dateHeure)
 VALUES
 (1, '2023-09-30 10:00:00'),
 (2, '2023-10-01 11:00:00');
+
+-- Insertion de données dans la table CompteRendu
+INSERT INTO CompteRendu (id_com, date, commentaires, id_reu)
+VALUES
+(1, '2023-10-01', 'RAS', 1),
+(2, '2023-10-02', 'RAS', 2);
 
 -- Insertion de données dans la table Participant_Reunion
 INSERT INTO Participant_Reunion (personnel_id, reunion_id)
@@ -260,21 +274,27 @@ VALUES
 (5, 2);
 
 -- Insertion de données dans la table Service
-INSERT INTO Service (id_serv, nom, responsableAdministratif_id, medecinReferent_id)
+INSERT INTO Service (id_serv, nom, id_admin, id_med_ref)
 VALUES
 (1, 'Cardiologie', 9, 1),
 (2, 'Pédiatrie', 10, 2);
 
--- Insertion de données dans la table Chambre
-INSERT INTO Chambre (numero, etage, capacite, service_id)
+-- Insertion de données dans la table Etage
+INSERT INTO Etage (id_eta, id_serv)
 VALUES
-(101, 1, 2, 1),
-(102, 1, 2, 1),
-(201, 2, 4, 2);
+(1, 1),
+(2, 2);
+
+-- Insertion de données dans la table Chambre
+INSERT INTO Chambre (numero_cha, etage, capacite)
+VALUES
+(101, 1, 2),
+(102, 1, 2),
+(201, 2, 4);
 
 -- Insertion de données dans la table Lit
-INSERT INTO Lit (id_lit, numero, chambre_numero, service_id, occupant_id, dateDernierAgentEntretient, nettoyeur_id)
+INSERT INTO Lit (id_lit, numero_cha, id_pat, dateDernierEntretient, id_agent)
 VALUES
-(1, 1, 101, 1, 11, '2023-10-01', 7),
-(2, 2, 101, 1, NULL, '2023-10-02', 8),
-(3, 1, 201, 2, 12, '2023-10-03', 7);
+(1, 1, 11, '2023-10-01', 7),
+(2, 2, 12, '2023-10-02', 8),
+(3, 1, 13, '2023-10-03', 7);
