@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0e0e0; /* Couleur de fond gris clair */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 30px; /* Augmenter le padding pour plus d'espace */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333; /* Couleur du texte gris foncé */
+}
+
+input {
+    width: 100%;
+    padding: 12px; /* Augmenter le padding pour un meilleur confort */
+    margin: 10px 0;
+    border: 1px solid #ccc; /* Bord gris clair */
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #f9f9f9; /* Fond des champs d'entrée gris très clair */
+    box-sizing: border-box; /* Inclure le padding dans la largeur totale */
+}
+
+input:focus {
+    border-color: #888; /* Bord gris moyen lors du focus */
+    background-color: #fff; /* Fond blanc lors du focus */
+}
+
+button {
+    width: 100%;
+    padding: 12px; /* Augmenter le padding pour un meilleur confort */
+    background-color: #555; /* Bouton gris foncé */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px; /* Espacement au-dessus du bouton */
+}
+
+button:hover {
+    background-color: #444; /* Couleur du bouton au survol */
+}
+
+#message {
+    margin-top: 15px;
+    color: red;
+    font-size: 14px;
+}
