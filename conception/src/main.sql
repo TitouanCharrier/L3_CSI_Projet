@@ -94,10 +94,8 @@ CREATE TABLE Soin (
 CREATE TABLE Ordonnance (
     id_ord INT PRIMARY KEY,
     id_medica INT,
-    id_soin INT,
     quantite INT,
-    FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica),
-    FOREIGN KEY (id_soin) REFERENCES Soin (id_soin)
+    FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica)
 );
 
 -- Table Reunion
