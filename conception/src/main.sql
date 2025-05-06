@@ -144,8 +144,11 @@ CREATE TABLE Chambre (
     numero_cha INT PRIMARY KEY,
     etage INT,
     capacite INT,
+    dateDernierEntretient DATE,
     id_serv INT,
-    FOREIGN KEY (id_serv) REFERENCES Service(id_serv)
+    id_agent INT,
+    FOREIGN KEY (id_serv) REFERENCES Service(id_serv),
+    FOREIGN KEY (id_agent) REFERENCES AgentEntretient(id_agent)
 );
 
 -- Table Lit
@@ -153,11 +156,8 @@ CREATE TABLE Lit (
     id_lit INT PRIMARY KEY,
     numero_cha INT,
     id_pat INT,
-    dateDernierEntretient DATE,
-    id_agent INT,
     FOREIGN KEY (numero_cha) REFERENCES Chambre(numero_cha),
     FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
-    FOREIGN KEY (id_agent) REFERENCES AgentEntretient(id_agent)
 );
 
 -- Insertion de données dans la table Hopital
