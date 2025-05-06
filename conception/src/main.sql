@@ -84,16 +84,18 @@ CREATE TABLE Soin (
     description TEXT,
     id_inf INT,
     id_pat INT,
+    id_ord INT,
     FOREIGN KEY (id_inf) REFERENCES Infirmier(id_inf),
-    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat)
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
+    FOREIGN KEY (id_ord) REFERENCES Ordonnance(id_ord)
 );
 
 -- Table Ordonnance
 CREATE TABLE Ordonnance (
+    id_ord INT PRIMARY KEY,
     id_medica INT,
     id_soin INT,
     quantite INT,
-    PRIMARY KEY (id_medica, id_soin),
     FOREIGN KEY (id_medica) REFERENCES Medicament (id_medica),
     FOREIGN KEY (id_soin) REFERENCES Soin (id_soin)
 );
