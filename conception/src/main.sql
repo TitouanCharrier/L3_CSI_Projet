@@ -153,11 +153,12 @@ CREATE TABLE Chambre (
 
 -- Table Lit
 CREATE TABLE Lit (
-    id_lit INT PRIMARY KEY,
+    id_lit INT,
     numero_cha INT,
     id_pat INT,
+    PRIMARY KEY (id_lit, numero_cha),
     FOREIGN KEY (numero_cha) REFERENCES Chambre(numero_cha),
-    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat)
 );
 
 -- Insertion de données dans la table Hopital
