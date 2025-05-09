@@ -10,14 +10,14 @@ CREATE TABLE Personne (
     id_per INT PRIMARY KEY,
     nom_per VARCHAR(100),
     prenom VARCHAR(100),
-    naissance DATETIME
+    naissance DATE
 );
 
 -- Table Personnel (Hérite de Personne)
 CREATE TABLE Personnel (
     id_pers INT PRIMARY KEY,
-    embauche DATETIME,
-    finContrat DATETIME,
+    embauche DATE,
+    finContrat DATE,
     salaire INT,
     id_hop INT,
     FOREIGN KEY (id_pers) REFERENCES Personne(id_per),
@@ -77,19 +77,6 @@ CREATE TABLE Medicament (
     nom_medica TEXT
 );
 
--- Table Soin
-CREATE TABLE Soin (
-    id_soin INT PRIMARY KEY,
-    dateHeure DATETIME,
-    description TEXT,
-    id_inf INT,
-    id_pat INT,
-    id_ord INT,
-    FOREIGN KEY (id_inf) REFERENCES Infirmier(id_inf),
-    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
-    FOREIGN KEY (id_ord) REFERENCES Ordonnance(id_ord)
-);
-
 -- Table Ordonnance
 CREATE TABLE Ordonnance (
     id_ord INT PRIMARY KEY,
@@ -104,6 +91,15 @@ CREATE TABLE Reunion (
     dateHeure DATETIME
 );
 
+-- Table Participant_Reunion (Relation n-n entre Personnel et Reunion)
+CREATE TABLE Participant_Reunion (
+    id_pers INT,
+    id_reu INT,
+    PRIMARY KEY (id_pers, id_reu),
+    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers),
+    FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
+);
+
 -- Table CompteRendu
 CREATE TABLE CompteRendu (
     id_com INT PRIMARY KEY,
@@ -113,12 +109,18 @@ CREATE TABLE CompteRendu (
     FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
 );
 
--- Table Participant_Reunion (Relation n-n entre Personnel et Reunion)
-CREATE TABLE Participant_Reunion (
-    id_pers INT,
+-- Table Soin
+CREATE TABLE Soin (
+    id_soin INT PRIMARY KEY,
+    dateHeure DATETIME,
+    description TEXT,
+    id_inf INT,
+    id_pat INT,
+    id_ord INT,
     id_reu INT,
-    PRIMARY KEY (id_pers, id_reu),
-    FOREIGN KEY (id_pers) REFERENCES Personnel(id_pers),
+    FOREIGN KEY (id_inf) REFERENCES Infirmier(id_inf),
+    FOREIGN KEY (id_pat) REFERENCES Patient(id_pat),
+    FOREIGN KEY (id_ord) REFERENCES Ordonnance(id_ord),
     FOREIGN KEY (id_reu) REFERENCES Reunion(id_reu)
 );
 
@@ -144,10 +146,17 @@ CREATE TABLE Chambre (
     numero_cha INT PRIMARY KEY,
     etage INT,
     capacite INT,
-    dateDernierEntretient DATE,
     id_serv INT,
+    FOREIGN KEY (id_serv) REFERENCES Service(id_serv)
+);
+
+--Table Nettoyage
+CREATE TABLE Nettoyage (
+    id_net INT PRIMARY KEY,
+    numero_cha INT,
+    date_net DATE,
     id_agent INT,
-    FOREIGN KEY (id_serv) REFERENCES Service(id_serv),
+    FOREIGN KEY (numero_cha) REFERENCES Chambre(numero_cha),
     FOREIGN KEY (id_agent) REFERENCES AgentEntretient(id_agent)
 );
 
@@ -161,11 +170,9 @@ CREATE TABLE Lit (
     FOREIGN KEY (id_pat) REFERENCES Patient(id_pat)
 );
 
--- Insertion de données dans la table Hopital
 INSERT INTO Hopital (id_hop, nom_hop, adresse)
 VALUES
-(1, 'Hôpital Central', '123 Rue de la Santé, Paris'),
-(2, 'Clinique Verte', '456 Avenue des Soins, Lyon');
+(1, 'Hôpital Central', '123 Rue de la Santé, Paris');
 
 -- Insertion de données dans la table Personne
 INSERT INTO Personne (id_per, nom_per, prenom, naissance)
@@ -189,12 +196,12 @@ INSERT INTO Personnel (id_pers, embauche, finContrat, salaire, id_hop)
 VALUES
 (1, '2000-01-15', NULL, 5000, 1),
 (2, '2005-03-20', NULL, 4500, 1),
-(3, '2002-07-30', NULL, 5200, 2),
+(3, '2002-07-30', NULL, 5200, 1),
 (4, '2010-05-10', NULL, 3500, 1),
-(5, '2012-09-20', NULL, 3800, 2),
+(5, '2012-09-20', NULL, 3800, 1),
 (6, '2008-04-12', NULL, 3700, 1),
-(7, '2006-06-25', NULL, 3000, 2),
-(8, '2011-08-18', NULL, 3200, 2),
+(7, '2006-06-25', NULL, 3000, 1),
+(8, '2011-08-18', NULL, 3200, 1),
 (9, '2003-10-05', NULL, 4000, 1),
 (10, '2007-12-30', NULL, 4200, 1);
 
@@ -226,15 +233,15 @@ VALUES
 -- Insertion de données dans la table Patient
 INSERT INTO Patient (id_pat, antecedentsMedicaux, raisonAccueil, dateEntree, dateSortiePrevisionnelle, dateSortieReelle)
 VALUES
-(11, 'Aucun', 'Opération', '2023-09-25', '2023-10-05', NULL),
-(12, 'Diabète', 'Suivi', '2023-09-28', '2023-10-07', NULL),
-(13, 'Hypertension', 'Contrôle', '2023-10-01', '2023-10-10', NULL);
+(11, 'Aucun', 'Opération', '2025-09-25', '2025-10-05', NULL),
+(12, 'Diabète', 'Suivi', '2025-09-28', '2025-10-07', NULL),
+(13, 'Hypertension', 'Contrôle', '2025-10-01', '2025-10-10', NULL);
 
 -- Insertion de données dans la table VisiteMedicale
 INSERT INTO VisiteMedicale (id_vis, date, examens, commentaires, id_med, id_pat)
 VALUES
-(1, '2023-10-01', 'Électrocardiogramme', 'Résultats normaux', 1, 11),
-(2, '2023-10-02', 'Radiographie', 'Fracture détectée', 2, 12);
+(1, '2025-10-01', 'Électrocardiogramme', 'Résultats normaux', 1, 11),
+(2, '2025-10-02', 'Radiographie', 'Fracture détectée', 2, 12);
 
 --Insertion de données dans la table Medicament
 INSERT INTO Medicament (id_medica, nom_medica)
@@ -242,14 +249,8 @@ VALUES
 (1, 'Paracetamol'),
 (2, 'Ibuprofene');
 
--- Insertion de données dans la table Soin
-INSERT INTO Soin (id_soin, dateHeure, description, id_inf, id_pat)
-VALUES
-(1, '2023-10-01 08:00:00', 'Administration de médicaments', 4, 11),
-(2, '2023-10-02 09:00:00', 'Changement de pansement', 5, 12);
-
 -- Insertion de données dans la table Ordonnance
-INSERT INTO Ordonnance (id_medica, id_soin, quantite)
+INSERT INTO Ordonnance (id_ord, id_medica, quantite)
 VALUES
 (1, 1, 2),
 (2, 1, 1);
@@ -257,22 +258,28 @@ VALUES
 -- Insertion de données dans la table Reunion
 INSERT INTO Reunion (id_reu, dateHeure)
 VALUES
-(1, '2023-09-30 10:00:00'),
-(2, '2023-10-01 11:00:00');
-
--- Insertion de données dans la table CompteRendu
-INSERT INTO CompteRendu (id_com, date, commentaires, id_reu)
-VALUES
-(1, '2023-10-01', 'RAS', 1),
-(2, '2023-10-02', 'RAS', 2);
+(1, '2025-09-30 10:00:00'),
+(2, '2025-10-01 11:00:00');
 
 -- Insertion de données dans la table Participant_Reunion
 INSERT INTO Participant_Reunion (id_pers, id_reu)
 VALUES
 (1, 1),
-(2, 1),
-(4, 2),
+(4, 1),
+(2, 2),
 (5, 2);
+
+-- Insertion de données dans la table CompteRendu
+INSERT INTO CompteRendu (id_com, date, commentaires, id_reu)
+VALUES
+(1, '2025-10-01', 'RAS', 1),
+(2, '2025-10-02', 'RAS', 2);
+
+-- Insertion de données dans la table Soin
+INSERT INTO Soin (id_soin, dateHeure, description, id_inf, id_pat, id_ord, id_reu)
+VALUES
+(1, '2025-10-01 08:00:00', 'Administration de médicaments', 4, 11, 1, 1),
+(2, '2025-10-02 09:00:00', 'Changement de pansement', 5, 12, 2, 2);
 
 -- Insertion de données dans la table Service
 INSERT INTO Service (id_serv, nom, id_admin, id_med_ref)
@@ -287,15 +294,21 @@ VALUES
 (2, 2);
 
 -- Insertion de données dans la table Chambre
-INSERT INTO Chambre (numero_cha, etage, capacite)
+INSERT INTO Chambre (numero_cha, etage, capacite, id_serv)
 VALUES
-(1, 1, 2),
-(2, 1, 2),
-(3, 2, 4);
+(1, 1, 2, 1),
+(2, 1, 2, 1),
+(3, 2, 4, 2);
+
+-- Insertion de données dans la table Nettoyage
+INSERT INTO Nettoyage (id_net, numero_cha, date_net, id_agent)
+VALUES
+(1, 1, '2025-05-09', 7),
+(2, 3, '2025-02-23', 8);
 
 -- Insertion de données dans la table Lit
-INSERT INTO Lit (id_lit, numero_cha, id_pat, dateDernierEntretient, id_agent)
+INSERT INTO Lit (id_lit, numero_cha, id_pat)
 VALUES
-(1, 1, 11, '2023-10-01', 7),
-(2, 2, 12, '2023-10-02', 8),
-(3, 1, 13, '2023-10-03', 7);
+(1, 1, 11),
+(2, 2, 12),
+(3, 1, 13);
